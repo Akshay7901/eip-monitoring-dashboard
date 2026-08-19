@@ -63,7 +63,7 @@ export default function Dashboard() {
         <div>
           <div className="dashboard-brand">
             <span className="status-dot" />
-            <h1>Automation Monitoring</h1>
+            <h1>EIP Automation Monitoring</h1>
           </div>
           <p className="dashboard-subtitle">
             Health of scheduled and event-driven jobs across systems
