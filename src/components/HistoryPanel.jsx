@@ -58,16 +58,22 @@ export function HistoryPanel({ service, onClose, onDeleted }) {
     <div className="history-overlay" onClick={onClose}>
       <div className="history-panel" onClick={(e) => e.stopPropagation()}>
         <div className="history-header">
-          <div>
-            <h2>{service.name}</h2>
-            <p className="history-key">{service.key}</p>
-          </div>
+          <h2>Service details</h2>
           <button type="button" className="history-close" onClick={onClose} aria-label="Close">
             ×
           </button>
         </div>
 
-        {service.description && <p className="history-description">{service.description}</p>}
+        <div className="history-fields">
+          <span className="history-field-label">Name</span>
+          <p className="history-field-value">{service.name}</p>
+
+          <span className="history-field-label">Description</span>
+          <p className="history-field-value">{service.description || 'No description'}</p>
+
+          <span className="history-field-label">Key</span>
+          <p className="history-field-value history-field-value--mono">{service.key}</p>
+        </div>
 
         <div className="history-meta">
           <span>Interval</span>

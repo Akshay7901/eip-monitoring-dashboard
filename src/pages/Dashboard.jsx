@@ -135,7 +135,7 @@ export default function Dashboard() {
                     <tr key={service.key} onClick={() => setSelectedService(service)}>
                       <td>
                         <span className={`health-dot health-dot--${category}`} />
-                        {service.name}
+                        <span className="service-name">{service.name}</span>
                       </td>
                       <td>{formatInterval(service.interval_seconds)}</td>
                       <td>{formatRelativeSeconds(service.seconds_since_ping)}</td>
@@ -176,6 +176,7 @@ export default function Dashboard() {
 
       {selectedService && (
         <HistoryPanel
+          key={selectedService.key}
           service={selectedService}
           onClose={() => setSelectedService(null)}
           onDeleted={() => {

@@ -21,7 +21,7 @@
 
 .history-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
@@ -30,13 +30,6 @@
   margin: 0;
   font-size: 18px;
   color: oklch(0.97 0.004 260);
-}
-
-.history-key {
-  margin: 4px 0 0;
-  font-size: 12px;
-  font-family: ui-monospace, Consolas, monospace;
-  color: oklch(0.55 0.006 260);
 }
 
 .history-close {
@@ -56,12 +49,38 @@
   color: oklch(0.9 0.006 260);
 }
 
-.history-description {
-  margin: 14px 0 0;
-  font-size: 13px;
-  color: oklch(0.62 0.006 260);
-  line-height: 1.4;
+.history-fields {
+  display: flex;
+  flex-direction: column;
+  margin-top: 18px;
 }
+
+.history-field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: oklch(0.6 0.006 260);
+  margin-top: 14px;
+}
+
+.history-field-label:first-child {
+  margin-top: 0;
+}
+
+.history-field-value {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: oklch(0.9 0.004 260);
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+.history-field-value--mono {
+  font-size: 12px;
+  font-family: ui-monospace, Consolas, monospace;
+  color: oklch(0.55 0.006 260);
+}
+
 
 .history-meta {
   display: flex;

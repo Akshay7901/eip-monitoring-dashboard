@@ -199,7 +199,17 @@
 
 .services-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
+}
+
+.services-table th:nth-child(1) {
+  width: 40%;
+}
+.services-table th:nth-child(2),
+.services-table th:nth-child(3),
+.services-table th:nth-child(4) {
+  width: 20%;
 }
 
 .services-table th {
@@ -221,10 +231,20 @@
 
 .services-table td:first-child {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   font-weight: 500;
   color: oklch(0.95 0.004 260);
+}
+
+.services-table .health-dot {
+  margin-top: 4px;
+}
+
+.service-name {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 .services-table tbody tr {
