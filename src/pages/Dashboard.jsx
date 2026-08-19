@@ -62,7 +62,7 @@ export default function Dashboard() {
       <aside className="dashboard-sidebar">
         <div className="sidebar-brand">
           <span className="status-dot" />
-          <span>EIP Monitoring</span>
+          <span>EIP Automation Monitoring</span>
         </div>
 
         <nav className="sidebar-nav">
