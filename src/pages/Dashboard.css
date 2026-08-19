@@ -1,0 +1,237 @@
+:root {
+  --health-healthy: oklch(0.72 0.16 150);
+  --health-late: #f59e0b;
+  --health-dead: #f87171;
+  --health-unknown: oklch(0.6 0.006 260);
+  --health-event: oklch(0.72 0.13 250);
+}
+
+.dashboard {
+  min-height: 100svh;
+  background: oklch(0.16 0.004 260);
+  color: oklch(0.92 0.004 260);
+  padding: 32px 40px 64px;
+  box-sizing: border-box;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-brand h1 {
+  font-size: 26px;
+  margin: 0;
+  color: oklch(0.97 0.004 260);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--health-healthy);
+  box-shadow: 0 0 8px var(--health-healthy);
+}
+
+.dashboard-subtitle {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: oklch(0.62 0.006 260);
+}
+
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-updated {
+  font-size: 13px;
+  color: oklch(0.55 0.006 260);
+}
+
+.dashboard-actions button {
+  font: inherit;
+  font-size: 14px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid oklch(0.28 0.006 260);
+  background: oklch(0.2 0.005 260);
+  color: oklch(0.92 0.004 260);
+  cursor: pointer;
+}
+
+.dashboard-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dashboard-logout {
+  background: transparent !important;
+  color: oklch(0.6 0.006 260) !important;
+}
+
+.dashboard-error {
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.summary-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: oklch(0.2 0.005 260);
+  border: 1px solid oklch(0.28 0.006 260);
+  color: oklch(0.85 0.006 260);
+}
+
+.summary-chip strong {
+  color: oklch(0.97 0.004 260);
+  font-weight: 600;
+}
+
+.summary-chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.summary-chip--healthy .summary-chip-dot {
+  background: var(--health-healthy);
+}
+.summary-chip--late .summary-chip-dot {
+  background: var(--health-late);
+}
+.summary-chip--dead .summary-chip-dot {
+  background: var(--health-dead);
+}
+.summary-chip--unknown .summary-chip-dot {
+  background: var(--health-unknown);
+}
+.summary-chip--event .summary-chip-dot {
+  background: var(--health-event);
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.service-card {
+  background: oklch(0.19 0.005 260);
+  border: 1px solid oklch(0.28 0.006 260);
+  border-left: 3px solid oklch(0.28 0.006 260);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.service-card--healthy {
+  border-left-color: var(--health-healthy);
+}
+.service-card--late {
+  border-left-color: var(--health-late);
+}
+.service-card--dead {
+  border-left-color: var(--health-dead);
+}
+.service-card--unknown {
+  border-left-color: var(--health-unknown);
+}
+.service-card--event {
+  border-left-color: var(--health-event);
+}
+
+.service-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.service-card-top h2 {
+  font-size: 16px;
+  margin: 0;
+  color: oklch(0.95 0.004 260);
+}
+
+.health-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.health-badge--healthy {
+  color: var(--health-healthy);
+  background: color-mix(in oklch, var(--health-healthy) 18%, transparent);
+}
+.health-badge--late {
+  color: var(--health-late);
+  background: color-mix(in oklch, var(--health-late) 18%, transparent);
+}
+.health-badge--dead {
+  color: var(--health-dead);
+  background: color-mix(in oklch, var(--health-dead) 18%, transparent);
+}
+.health-badge--unknown {
+  color: var(--health-unknown);
+  background: color-mix(in oklch, var(--health-unknown) 18%, transparent);
+}
+.health-badge--event {
+  color: var(--health-event);
+  background: color-mix(in oklch, var(--health-event) 18%, transparent);
+}
+
+.service-description {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: oklch(0.62 0.006 260);
+  line-height: 1.4;
+}
+
+.service-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  font-size: 13px;
+  color: oklch(0.55 0.006 260);
+}
+
+.service-row span:last-child {
+  color: oklch(0.85 0.006 260);
+}
+
+.dashboard-empty {
+  margin-top: 40px;
+  text-align: center;
+  color: oklch(0.55 0.006 260);
+}
