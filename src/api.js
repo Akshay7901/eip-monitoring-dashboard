@@ -32,6 +32,10 @@ export function login(username, password) {
   })
 }
 
+export function logout(token) {
+  return request('/auth/logout', { token, method: 'POST' })
+}
+
 export function getStatus(token) {
   return request('/status', { token })
 }

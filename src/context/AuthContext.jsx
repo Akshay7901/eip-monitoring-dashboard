@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState } from 'react'
-import { login as loginRequest } from '../api'
+import { login as loginRequest, logout as logoutRequest } from '../api'
 
 const STORAGE_KEY = 'eip_auth'
 const AuthContext = createContext(null)
@@ -31,9 +31,17 @@ export function AuthProvider({ children }) {
     setAuth(next)
   }
 
-  const logout = () => {
+  const logout = async () => {
+    const token = auth?.token
     localStorage.removeItem(STORAGE_KEY)
     setAuth(null)
+    if (token) {
+      try {
+        await logoutRequest(token)
+      } catch {
+        // token is already cleared locally; nothing more to do
+      }
+    }
   }
 
   const value = useMemo(
