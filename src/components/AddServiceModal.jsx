@@ -15,7 +15,7 @@ export function AddServiceModal({ onClose, onCreated }) {
   const [key, setKey] = useState('')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [intervalValue, setIntervalValue] = useState(1)
+  const [intervalValue, setIntervalValue] = useState('')
   const [unitIndex, setUnitIndex] = useState(2)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -31,7 +31,7 @@ export function AddServiceModal({ onClose, onCreated }) {
         key: key.trim(),
         name: name.trim(),
         description: description.trim(),
-        interval_seconds: Number(intervalValue) * UNITS[unitIndex].seconds,
+        interval_seconds: intervalValue ? Number(intervalValue) * UNITS[unitIndex].seconds : null,
       })
       setResult(created)
       onCreated()
@@ -99,7 +99,9 @@ export function AddServiceModal({ onClose, onCreated }) {
               rows={2}
             />
 
-            <label htmlFor="svc-interval">Ping interval</label>
+            <label htmlFor="svc-interval">
+              Ping interval <span className="modal-optional">(optional — leave blank for event-driven)</span>
+            </label>
             <div className="interval-field">
               <input
                 id="svc-interval"
@@ -107,11 +109,12 @@ export function AddServiceModal({ onClose, onCreated }) {
                 min="1"
                 value={intervalValue}
                 onChange={(e) => setIntervalValue(e.target.value)}
-                required
+                placeholder="e.g. 1"
               />
               <select
                 value={unitIndex}
                 onChange={(e) => setUnitIndex(Number(e.target.value))}
+                disabled={!intervalValue}
               >
                 {UNITS.map((unit, i) => (
                   <option key={unit.label} value={i}>

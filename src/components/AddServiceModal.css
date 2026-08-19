@@ -43,6 +43,11 @@
   margin-bottom: 6px;
 }
 
+.modal-optional {
+  font-weight: 400;
+  color: oklch(0.55 0.006 260);
+}
+
 .modal-card input,
 .modal-card textarea,
 .modal-card select {
