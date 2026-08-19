@@ -157,7 +157,9 @@
 }
 
 .service-card {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   width: 100%;
   font: inherit;
   text-align: left;
@@ -244,13 +246,21 @@
   line-height: 1.4;
 }
 
+.service-meta {
+  margin-top: auto;
+  padding-top: 14px;
+}
+
 .service-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 14px;
   font-size: 13px;
   color: oklch(0.55 0.006 260);
+}
+
+.service-row + .service-row {
+  margin-top: 8px;
 }
 
 .service-row span:last-child {

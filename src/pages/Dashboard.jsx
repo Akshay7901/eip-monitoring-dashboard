@@ -143,13 +143,15 @@ export default function Dashboard() {
               {service.description && (
                 <p className="service-description">{service.description}</p>
               )}
-              <div className="service-row">
-                <span>Last ping</span>
-                <span>{formatRelativeSeconds(service.seconds_since_ping)}</span>
-              </div>
-              <div className="service-row">
-                <span>Interval</span>
-                <span>{formatInterval(service.interval_seconds)}</span>
+              <div className="service-meta">
+                <div className="service-row">
+                  <span>Last ping</span>
+                  <span>{formatRelativeSeconds(service.seconds_since_ping)}</span>
+                </div>
+                <div className="service-row">
+                  <span>Interval</span>
+                  <span>{formatInterval(service.interval_seconds)}</span>
+                </div>
               </div>
             </button>
           )
