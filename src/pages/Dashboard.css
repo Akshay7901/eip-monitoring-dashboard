@@ -244,6 +244,11 @@
   font-size: 13px;
   color: oklch(0.62 0.006 260);
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .service-meta {
