@@ -19,6 +19,7 @@ export default function Dashboard() {
   const [now, setNow] = useState(Date.now())
   const [showAddModal, setShowAddModal] = useState(false)
   const [selectedService, setSelectedService] = useState(null)
+  const [activeFilter, setActiveFilter] = useState(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -51,7 +52,10 @@ export default function Dashboard() {
   }, [])
 
   const lastUpdatedSeconds = fetchedAt ? Math.floor((now - fetchedAt) / 1000) : null
-  const sortedServices = sortByHealth(services)
+  const visibleServices = activeFilter
+    ? services.filter((service) => healthCategory(service) === activeFilter)
+    : services
+  const sortedServices = sortByHealth(visibleServices)
 
   return (
     <div className="dashboard">
@@ -103,11 +107,19 @@ export default function Dashboard() {
       {summary && (
         <div className="summary-row">
           {SUMMARY_ORDER.map((key) => (
-            <div key={key} className={`summary-chip summary-chip--${key}`}>
+            <button
+              type="button"
+              key={key}
+              className={`summary-chip summary-chip--${key}${
+                activeFilter === key ? ' summary-chip--active' : ''
+              }`}
+              onClick={() => setActiveFilter((current) => (current === key ? null : key))}
+              aria-pressed={activeFilter === key}
+            >
               <span className="summary-chip-dot" />
               {HEALTH_META[key].label}
               <strong>{summary[key] ?? 0}</strong>
-            </div>
+            </button>
           ))}
         </div>
       )}
@@ -146,6 +158,15 @@ export default function Dashboard() {
 
       {!loading && services.length === 0 && !error && (
         <p className="dashboard-empty">No services registered yet.</p>
+      )}
+
+      {!loading && services.length > 0 && sortedServices.length === 0 && !error && (
+        <p className="dashboard-empty">
+          No {HEALTH_META[activeFilter].label.toLowerCase()} services.{' '}
+          <button type="button" className="dashboard-clear-filter" onClick={() => setActiveFilter(null)}>
+            Clear filter
+          </button>
+        </p>
       )}
     </div>
   )

@@ -102,12 +102,25 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  font: inherit;
   font-size: 13.5px;
   padding: 8px 16px;
   border-radius: 999px;
   background: oklch(0.2 0.005 260);
   border: 1px solid oklch(0.28 0.006 260);
   color: oklch(0.85 0.006 260);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.summary-chip:hover {
+  border-color: oklch(0.4 0.006 260);
+}
+
+.summary-chip--active {
+  background: oklch(0.24 0.006 260);
+  border-color: oklch(0.5 0.006 260);
+  color: oklch(0.97 0.004 260);
 }
 
 .summary-chip strong {
@@ -248,4 +261,15 @@
   margin-top: 40px;
   text-align: center;
   color: oklch(0.55 0.006 260);
+}
+
+.dashboard-clear-filter {
+  font: inherit;
+  font-size: inherit;
+  padding: 0;
+  border: none;
+  background: none;
+  color: oklch(0.72 0.13 250);
+  text-decoration: underline;
+  cursor: pointer;
 }
