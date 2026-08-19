@@ -1,7 +1,6 @@
 :root {
   --health-healthy: oklch(0.72 0.16 150);
-  --health-late: #f59e0b;
-  --health-dead: #f87171;
+  --health-unhealthy: #f87171;
   --health-unknown: oklch(0.6 0.006 260);
   --health-event: oklch(0.72 0.13 250);
 }
@@ -137,11 +136,8 @@
 .summary-chip--healthy .summary-chip-dot {
   background: var(--health-healthy);
 }
-.summary-chip--late .summary-chip-dot {
-  background: var(--health-late);
-}
-.summary-chip--dead .summary-chip-dot {
-  background: var(--health-dead);
+.summary-chip--unhealthy .summary-chip-dot {
+  background: var(--health-unhealthy);
 }
 .summary-chip--unknown .summary-chip-dot {
   background: var(--health-unknown);
@@ -183,11 +179,8 @@
 .service-card--healthy {
   border-left-color: var(--health-healthy);
 }
-.service-card--late {
-  border-left-color: var(--health-late);
-}
-.service-card--dead {
-  border-left-color: var(--health-dead);
+.service-card--unhealthy {
+  border-left-color: var(--health-unhealthy);
 }
 .service-card--unknown {
   border-left-color: var(--health-unknown);
@@ -222,13 +215,9 @@
   color: var(--health-healthy);
   background: color-mix(in oklch, var(--health-healthy) 18%, transparent);
 }
-.health-badge--late {
-  color: var(--health-late);
-  background: color-mix(in oklch, var(--health-late) 18%, transparent);
-}
-.health-badge--dead {
-  color: var(--health-dead);
-  background: color-mix(in oklch, var(--health-dead) 18%, transparent);
+.health-badge--unhealthy {
+  color: var(--health-unhealthy);
+  background: color-mix(in oklch, var(--health-unhealthy) 18%, transparent);
 }
 .health-badge--unknown {
   color: var(--health-unknown);

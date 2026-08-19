@@ -7,7 +7,7 @@ import { formatInterval, formatRelativeSeconds, formatShortAgo } from '../utils/
 import { HEALTH_META, healthCategory, sortByHealth } from '../utils/health'
 import './Dashboard.css'
 
-const SUMMARY_ORDER = ['healthy', 'late', 'dead', 'unknown', 'event']
+const SUMMARY_ORDER = ['healthy', 'unhealthy', 'unknown', 'event']
 
 export default function Dashboard() {
   const { token, logout } = useAuth()

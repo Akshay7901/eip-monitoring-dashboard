@@ -1,12 +1,11 @@
 export const HEALTH_META = {
-  dead: { label: 'Dead' },
-  late: { label: 'Late' },
+  unhealthy: { label: 'Unhealthy' },
   unknown: { label: 'Unknown' },
   healthy: { label: 'Healthy' },
   event: { label: 'Event-driven' },
 }
 
-const SORT_ORDER = ['dead', 'late', 'unknown', 'healthy', 'event']
+const SORT_ORDER = ['unhealthy', 'unknown', 'healthy', 'event']
 
 export function healthCategory(service) {
   return service.health ?? 'event'
