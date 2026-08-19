@@ -1,0 +1,135 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.55);
+  box-sizing: border-box;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px;
+  border-radius: 12px;
+  border: 1px solid oklch(0.28 0.006 260);
+  background: oklch(0.19 0.005 260);
+  color: oklch(0.92 0.004 260);
+  box-shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  box-sizing: border-box;
+}
+
+.modal-card h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  color: oklch(0.97 0.004 260);
+}
+
+.modal-subtitle {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: oklch(0.62 0.006 260);
+}
+
+.modal-card label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: oklch(0.92 0.004 260);
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+
+.modal-card input,
+.modal-card textarea,
+.modal-card select {
+  width: 100%;
+  font: inherit;
+  font-size: 14px;
+  padding: 9px 11px;
+  border: 1px solid oklch(0.28 0.006 260);
+  border-radius: 8px;
+  background: oklch(0.16 0.004 260);
+  color: oklch(0.95 0.004 260);
+  box-sizing: border-box;
+}
+
+.modal-card textarea {
+  resize: vertical;
+}
+
+.modal-card input:focus,
+.modal-card textarea:focus,
+.modal-card select:focus {
+  outline: none;
+  border-color: oklch(0.72 0.13 250);
+}
+
+.interval-field {
+  display: flex;
+  gap: 8px;
+}
+
+.interval-field input {
+  flex: 1;
+}
+
+.interval-field select {
+  flex: 1;
+}
+
+.modal-error {
+  margin-top: 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.modal-actions button {
+  font: inherit;
+  font-size: 14px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid oklch(0.28 0.006 260);
+  background: transparent;
+  color: oklch(0.85 0.006 260);
+  cursor: pointer;
+}
+
+.modal-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-actions .modal-primary {
+  border: none;
+  background: var(--accent);
+  color: #16171d;
+  font-weight: 500;
+}
+
+.ping-curl {
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: oklch(0.16 0.004 260);
+  border: 1px solid oklch(0.28 0.006 260);
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 12px;
+  color: oklch(0.85 0.006 260);
+  white-space: pre-wrap;
+  word-break: break-all;
+}

@@ -144,11 +144,25 @@
 }
 
 .service-card {
+  display: block;
+  width: 100%;
+  font: inherit;
+  text-align: left;
   background: oklch(0.19 0.005 260);
   border: 1px solid oklch(0.28 0.006 260);
   border-left: 3px solid oklch(0.28 0.006 260);
   border-radius: 10px;
   padding: 20px;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.service-card:hover {
+  border-top-color: oklch(0.4 0.006 260);
+  border-right-color: oklch(0.4 0.006 260);
+  border-bottom-color: oklch(0.4 0.006 260);
 }
 
 .service-card--healthy {

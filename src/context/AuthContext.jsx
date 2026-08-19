@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState } from 'react'
-import { login as loginRequest } from '../api/auth'
+import { login as loginRequest } from '../api'
 
 const STORAGE_KEY = 'eip_auth'
 const AuthContext = createContext(null)

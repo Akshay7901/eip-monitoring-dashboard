@@ -1,17 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { getStatus } from '../api/status'
-import { UnauthorizedError } from '../api/client'
+import { getStatus, UnauthorizedError } from '../api'
+import { AddServiceModal } from '../components/AddServiceModal'
+import { HistoryPanel } from '../components/HistoryPanel'
 import { useAuth } from '../context/AuthContext'
 import { formatInterval, formatRelativeSeconds, formatShortAgo } from '../utils/format'
+import { HEALTH_META, healthCategory, sortByHealth } from '../utils/health'
 import './Dashboard.css'
-
-const HEALTH_META = {
-  healthy: { label: 'Healthy' },
-  late: { label: 'Late' },
-  dead: { label: 'Dead' },
-  unknown: { label: 'Unknown' },
-  event: { label: 'Event-driven' },
-}
 
 const SUMMARY_ORDER = ['healthy', 'late', 'dead', 'unknown', 'event']
 
@@ -23,6 +17,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [fetchedAt, setFetchedAt] = useState(null)
   const [now, setNow] = useState(Date.now())
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [selectedService, setSelectedService] = useState(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -55,6 +51,7 @@ export default function Dashboard() {
   }, [])
 
   const lastUpdatedSeconds = fetchedAt ? Math.floor((now - fetchedAt) / 1000) : null
+  const sortedServices = sortByHealth(services)
 
   return (
     <div className="dashboard">
@@ -74,6 +71,9 @@ export default function Dashboard() {
               Last updated {formatShortAgo(lastUpdatedSeconds)}
             </span>
           )}
+          <button type="button" onClick={() => setShowAddModal(true)}>
+            Add service
+          </button>
           <button type="button" onClick={load} disabled={loading}>
             {loading ? 'Refreshing…' : 'Refresh'}
           </button>
@@ -82,6 +82,21 @@ export default function Dashboard() {
           </button>
         </div>
       </header>
+
+      {showAddModal && (
+        <AddServiceModal onClose={() => setShowAddModal(false)} onCreated={load} />
+      )}
+
+      {selectedService && (
+        <HistoryPanel
+          service={selectedService}
+          onClose={() => setSelectedService(null)}
+          onDeleted={() => {
+            setSelectedService(null)
+            load()
+          }}
+        />
+      )}
 
       {error && <div className="dashboard-error">{error}</div>}
 
@@ -98,27 +113,35 @@ export default function Dashboard() {
       )}
 
       <div className="service-grid">
-        {services.map((service) => (
-          <div key={service.key} className={`service-card service-card--${service.health}`}>
-            <div className="service-card-top">
-              <h2>{service.name}</h2>
-              <span className={`health-badge health-badge--${service.health}`}>
-                {HEALTH_META[service.health]?.label ?? service.health}
-              </span>
-            </div>
-            {service.description && (
-              <p className="service-description">{service.description}</p>
-            )}
-            <div className="service-row">
-              <span>Last ping</span>
-              <span>{formatRelativeSeconds(service.seconds_since_ping)}</span>
-            </div>
-            <div className="service-row">
-              <span>Interval</span>
-              <span>{formatInterval(service.interval_seconds)}</span>
-            </div>
-          </div>
-        ))}
+        {sortedServices.map((service) => {
+          const category = healthCategory(service)
+          return (
+            <button
+              type="button"
+              key={service.key}
+              className={`service-card service-card--${category}`}
+              onClick={() => setSelectedService(service)}
+            >
+              <div className="service-card-top">
+                <h2>{service.name}</h2>
+                <span className={`health-badge health-badge--${category}`}>
+                  {HEALTH_META[category].label}
+                </span>
+              </div>
+              {service.description && (
+                <p className="service-description">{service.description}</p>
+              )}
+              <div className="service-row">
+                <span>Last ping</span>
+                <span>{formatRelativeSeconds(service.seconds_since_ping)}</span>
+              </div>
+              <div className="service-row">
+                <span>Interval</span>
+                <span>{formatInterval(service.interval_seconds)}</span>
+              </div>
+            </button>
+          )
+        })}
       </div>
 
       {!loading && services.length === 0 && !error && (

@@ -18,7 +18,7 @@ export function formatShortAgo(seconds) {
 }
 
 export function formatInterval(seconds) {
-  if (!seconds) return '—'
+  if (!seconds) return 'Event-driven'
   if (seconds % 86400 === 0) {
     const days = seconds / 86400
     return `Every ${days} day${days === 1 ? '' : 's'}`
