@@ -7,7 +7,7 @@ import { formatInterval, formatRelativeSeconds, formatShortAgo } from '../utils/
 import { HEALTH_META, healthCategory, sortByHealth } from '../utils/health'
 import './Dashboard.css'
 
-const SUMMARY_ORDER = ['healthy', 'unhealthy', 'unknown', 'event']
+const FILTER_ORDER = ['unhealthy', 'unknown', 'healthy', 'event']
 
 export default function Dashboard() {
   const { token, logout } = useAuth()
@@ -58,34 +58,117 @@ export default function Dashboard() {
   const sortedServices = sortByHealth(visibleServices)
 
   return (
-    <div className="dashboard">
-      <header className="dashboard-header">
-        <div>
-          <div className="dashboard-brand">
-            <span className="status-dot" />
-            <h1>EIP Automation Monitoring</h1>
-          </div>
-          <p className="dashboard-subtitle">
-            Health of scheduled and event-driven jobs across systems
-          </p>
+    <div className="dashboard-layout">
+      <aside className="dashboard-sidebar">
+        <div className="sidebar-brand">
+          <span className="status-dot" />
+          <span>EIP Monitoring</span>
         </div>
-        <div className="dashboard-actions">
-          {lastUpdatedSeconds != null && (
-            <span className="dashboard-updated">
-              Last updated {formatShortAgo(lastUpdatedSeconds)}
-            </span>
-          )}
-          <button type="button" onClick={() => setShowAddModal(true)}>
-            Add service
+
+        <nav className="sidebar-nav">
+          <button
+            type="button"
+            className={`sidebar-item${activeFilter === null ? ' sidebar-item--active' : ''}`}
+            onClick={() => setActiveFilter(null)}
+          >
+            <span>All services</span>
+            <span className="sidebar-count">{services.length}</span>
           </button>
+          {FILTER_ORDER.map((key) => (
+            <button
+              type="button"
+              key={key}
+              className={`sidebar-item${activeFilter === key ? ' sidebar-item--active' : ''}`}
+              onClick={() => setActiveFilter((current) => (current === key ? null : key))}
+              aria-pressed={activeFilter === key}
+            >
+              <span className={`health-dot health-dot--${key}`} />
+              <span>{HEALTH_META[key].label}</span>
+              <span className="sidebar-count">{summary?.[key] ?? 0}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="sidebar-footer">
+          {lastUpdatedSeconds != null && (
+            <p className="sidebar-updated">Updated {formatShortAgo(lastUpdatedSeconds)}</p>
+          )}
           <button type="button" onClick={load} disabled={loading}>
             {loading ? 'Refreshing…' : 'Refresh'}
           </button>
-          <button type="button" className="dashboard-logout" onClick={logout}>
+          <button type="button" className="sidebar-logout" onClick={logout}>
             Log out
           </button>
         </div>
-      </header>
+      </aside>
+
+      <main className="dashboard-main">
+        <div className="dashboard-intro">
+          <h1>Services overview</h1>
+          <p>Select a service below for uptime, cadence, and ping history</p>
+        </div>
+
+        {error && <div className="dashboard-error">{error}</div>}
+
+        <div className="services-panel">
+          <div className="services-panel-header">
+            <h2>Services</h2>
+            <button type="button" onClick={() => setShowAddModal(true)}>
+              Add service
+            </button>
+          </div>
+
+          {sortedServices.length > 0 && (
+            <table className="services-table">
+              <thead>
+                <tr>
+                  <th>Service</th>
+                  <th>Interval</th>
+                  <th>Last ping</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedServices.map((service) => {
+                  const category = healthCategory(service)
+                  return (
+                    <tr key={service.key} onClick={() => setSelectedService(service)}>
+                      <td>
+                        <span className={`health-dot health-dot--${category}`} />
+                        {service.name}
+                      </td>
+                      <td>{formatInterval(service.interval_seconds)}</td>
+                      <td>{formatRelativeSeconds(service.seconds_since_ping)}</td>
+                      <td>
+                        <span className={`health-badge health-badge--${category}`}>
+                          {HEALTH_META[category].label}
+                        </span>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )}
+
+          {!loading && services.length === 0 && !error && (
+            <p className="dashboard-empty">No services registered yet.</p>
+          )}
+
+          {!loading && services.length > 0 && sortedServices.length === 0 && !error && (
+            <p className="dashboard-empty">
+              No {HEALTH_META[activeFilter].label.toLowerCase()} services.{' '}
+              <button
+                type="button"
+                className="dashboard-clear-filter"
+                onClick={() => setActiveFilter(null)}
+              >
+                Clear filter
+              </button>
+            </p>
+          )}
+        </div>
+      </main>
 
       {showAddModal && (
         <AddServiceModal onClose={() => setShowAddModal(false)} onCreated={load} />
@@ -100,75 +183,6 @@ export default function Dashboard() {
             load()
           }}
         />
-      )}
-
-      {error && <div className="dashboard-error">{error}</div>}
-
-      {summary && (
-        <div className="summary-row">
-          {SUMMARY_ORDER.map((key) => (
-            <button
-              type="button"
-              key={key}
-              className={`summary-chip summary-chip--${key}${
-                activeFilter === key ? ' summary-chip--active' : ''
-              }`}
-              onClick={() => setActiveFilter((current) => (current === key ? null : key))}
-              aria-pressed={activeFilter === key}
-            >
-              <span className="summary-chip-dot" />
-              {HEALTH_META[key].label}
-              <strong>{summary[key] ?? 0}</strong>
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="service-grid">
-        {sortedServices.map((service) => {
-          const category = healthCategory(service)
-          return (
-            <button
-              type="button"
-              key={service.key}
-              className={`service-card service-card--${category}`}
-              onClick={() => setSelectedService(service)}
-            >
-              <div className="service-card-top">
-                <h2>{service.name}</h2>
-                <span className={`health-badge health-badge--${category}`}>
-                  {HEALTH_META[category].label}
-                </span>
-              </div>
-              {service.description && (
-                <p className="service-description">{service.description}</p>
-              )}
-              <div className="service-meta">
-                <div className="service-row">
-                  <span>Last ping</span>
-                  <span>{formatRelativeSeconds(service.seconds_since_ping)}</span>
-                </div>
-                <div className="service-row">
-                  <span>Interval</span>
-                  <span>{formatInterval(service.interval_seconds)}</span>
-                </div>
-              </div>
-            </button>
-          )
-        })}
-      </div>
-
-      {!loading && services.length === 0 && !error && (
-        <p className="dashboard-empty">No services registered yet.</p>
-      )}
-
-      {!loading && services.length > 0 && sortedServices.length === 0 && !error && (
-        <p className="dashboard-empty">
-          No {HEALTH_META[activeFilter].label.toLowerCase()} services.{' '}
-          <button type="button" className="dashboard-clear-filter" onClick={() => setActiveFilter(null)}>
-            Clear filter
-          </button>
-        </p>
       )}
     </div>
   )
