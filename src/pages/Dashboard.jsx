@@ -183,6 +183,10 @@ export default function Dashboard() {
             setSelectedService(null)
             load()
           }}
+          onUpdated={(patch) => {
+            load()
+            setSelectedService((current) => (current ? { ...current, ...patch } : current))
+          }}
         />
       )}
     </div>

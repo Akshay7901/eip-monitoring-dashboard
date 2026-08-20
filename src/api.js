@@ -52,6 +52,14 @@ export function upsertService(token, service) {
   })
 }
 
+export function updateService(token, key, patch) {
+  return request(`/services/${encodeURIComponent(key)}`, {
+    token,
+    method: 'PATCH',
+    body: JSON.stringify(patch),
+  })
+}
+
 export function deleteService(token, key) {
   return request(`/services/${encodeURIComponent(key)}`, {
     token,

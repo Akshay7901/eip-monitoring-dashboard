@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { deleteService, getServiceHistory, UnauthorizedError } from '../api'
+import { deleteService, getServiceHistory, updateService, UnauthorizedError } from '../api'
 import { useAuth } from '../context/AuthContext'
 import { formatInterval } from '../utils/format'
 import { ConfirmDialog } from './ConfirmDialog'
 import './HistoryPanel.css'
 
-export function HistoryPanel({ service, onClose, onDeleted }) {
+export function HistoryPanel({ service, onClose, onDeleted, onUpdated }) {
   const { token, logout } = useAuth()
   const [pings, setPings] = useState([])
   const [loading, setLoading] = useState(true)
@@ -13,6 +13,11 @@ export function HistoryPanel({ service, onClose, onDeleted }) {
   const [confirmingDelete, setConfirmingDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState('')
+  const [editing, setEditing] = useState(false)
+  const [nameValue, setNameValue] = useState(service.name)
+  const [descriptionValue, setDescriptionValue] = useState(service.description ?? '')
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -37,6 +42,39 @@ export function HistoryPanel({ service, onClose, onDeleted }) {
       cancelled = true
     }
   }, [token, service.key, logout])
+
+  const cancelEdit = () => {
+    setNameValue(service.name)
+    setDescriptionValue(service.description ?? '')
+    setSaveError('')
+    setEditing(false)
+  }
+
+  const handleSave = async () => {
+    const trimmedName = nameValue.trim()
+    if (!trimmedName) {
+      setSaveError('Name is required')
+      return
+    }
+    setSaving(true)
+    setSaveError('')
+    try {
+      await updateService(token, service.key, {
+        name: trimmedName,
+        description: descriptionValue.trim(),
+      })
+      setEditing(false)
+      onUpdated({ name: trimmedName, description: descriptionValue.trim() })
+    } catch (err) {
+      if (err instanceof UnauthorizedError) {
+        logout()
+        return
+      }
+      setSaveError(err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
 
   const handleDelete = async () => {
     setDeleting(true)
@@ -64,16 +102,65 @@ export function HistoryPanel({ service, onClose, onDeleted }) {
           </button>
         </div>
 
-        <div className="history-fields">
-          <span className="history-field-label">Name</span>
-          <p className="history-field-value">{service.name}</p>
+        {editing ? (
+          <div className="history-fields">
+            <label htmlFor="hist-name" className="history-field-label">
+              Name
+            </label>
+            <input
+              id="hist-name"
+              autoFocus
+              value={nameValue}
+              onChange={(e) => setNameValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') cancelEdit()
+              }}
+            />
 
-          <span className="history-field-label">Description</span>
-          <p className="history-field-value">{service.description || 'No description'}</p>
+            <label htmlFor="hist-description" className="history-field-label">
+              Description
+            </label>
+            <textarea
+              id="hist-description"
+              value={descriptionValue}
+              onChange={(e) => setDescriptionValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') cancelEdit()
+              }}
+              rows={2}
+            />
 
-          <span className="history-field-label">Key</span>
-          <p className="history-field-value history-field-value--mono">{service.key}</p>
-        </div>
+            {saveError && <p className="history-status history-status--error">{saveError}</p>}
+
+            <div className="history-edit-actions">
+              <button type="button" onClick={handleSave} disabled={saving}>
+                {saving ? 'Saving…' : 'Save'}
+              </button>
+              <button type="button" onClick={cancelEdit} disabled={saving}>
+                Cancel
+              </button>
+            </div>
+
+            <span className="history-field-label">Key</span>
+            <p className="history-field-value history-field-value--mono">{service.key}</p>
+          </div>
+        ) : (
+          <div className="history-fields">
+            <div className="history-fields-top">
+              <span className="history-field-label">Name</span>
+              <button type="button" className="history-edit-link" onClick={() => setEditing(true)}>
+                Edit
+              </button>
+            </div>
+            <p className="history-field-value">{service.name}</p>
+
+            <span className="history-field-label">Description</span>
+            <p className="history-field-value">{service.description || 'No description'}</p>
+
+            <span className="history-field-label">Key</span>
+            <p className="history-field-value history-field-value--mono">{service.key}</p>
+          </div>
+        )}
 
         <div className="history-meta">
           <span>Interval</span>
